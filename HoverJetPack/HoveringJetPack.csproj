@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Use the same target framework as your working mod -->
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>QoLHoveringJetPack</AssemblyName>
+    <Description>Hovering jetpack mod for The Planet Crafter</Description>
+    <Version>2.0.0</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <!-- Use a *relative* import if you copy solution_private.targets next to this csproj -->
+  <!-- Load your game paths -->
+  <Import Project="solution_private.targets" />
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>I:\SteamLibrary\steamapps\common\The Planet Crafter\Planet Crafter_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>I:\SteamLibrary\steamapps\common\The Planet Crafter\Planet Crafter_Data\Managed\unityengine.ui.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputSystem">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>I:\SteamLibrary\steamapps\common\The Planet Crafter\Planet Crafter_Data\Managed\Unity.InputSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Unity.TextMeshPro">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>I:\SteamLibrary\steamapps\common\The Planet Crafter\Planet Crafter_Data\Managed\unity.textmeshpro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.HSVPicker">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>I:\SteamLibrary\steamapps\common\The Planet Crafter\Planet Crafter_Data\Managed\HSVPicker.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+    <PackageReference Include="BepInEx.Core" Version="5.*" />
+    <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+    <PackageReference Include="UnityEngine.Modules" Version="2023.2.19" IncludeAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.2" PrivateAssets="all" />
+  </ItemGroup>
+
+  <Target Name="CopyDLLs" AfterTargets="Build">
+    <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(Destination)" />
+    <Copy SourceFiles="$(TargetDir)$(AssemblyName).dll" DestinationFolder="$(TargetDir)\$(AssemblyName)\$(AuthorName) - $(Description)" />
+    <ZipDirectory SourceDirectory="$(TargetDir)\$(AssemblyName)" DestinationFile="$(OutputPath)\..\..\..\..\$(AuthorName)-$(AssemblyName).zip" Overwrite="true" />
+  </Target>
+</Project>
